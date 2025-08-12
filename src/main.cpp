@@ -102,7 +102,7 @@ int main() {
       p1Position.y = p1Input(p1Position.y);
       p2Position.y = p2Input(p2Position.y);
       DrawRectangleV(p1Position, (Vector2){10, 60}, OFFWHITE);
-      DrawRectangleV(p2Position, (Vector2){10, 60}, OFFWHITE);
+      DrawRectangleV(p2Position, (Vector2){1, 60}, OFFWHITE);
 
     EndDrawing();
   }
