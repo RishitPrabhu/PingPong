@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "raymath.h"
 
 #define BACKGROUND_GREEN CLITERAL (Color) {166, 178, 139, 255}
 #define OFFWHITE CLITERAL (Color){249, 246, 243, 255}
@@ -6,10 +7,11 @@
 const int windowHeight = 450;
 const int windowWidth = 800;
 
-
 Vector2 ballPosition = {(float)windowWidth/2, (float)windowHeight/2};
 Vector2 ballVelocity = {2, 2};
 Vector2 p1Position = {(float)0, (float)windowHeight/2  - 30};
+float p1Velocity = 0;
+float p2Velocity = 0;
 Vector2 p2Position = {(float)windowWidth - 10, (float)windowHeight/2  - 30};
 
 int p1Input(float posY){
@@ -38,23 +40,39 @@ int p2Input(float posY){
 }
 
 Vector2 CollisionCheck(Vector2 pos, Vector2 vel){
-  if(pos.y >= windowHeight - 15/2)
-  {
+  if(pos.y >= windowHeight - 15.0/2)
     vel.y =  -(vel.y);
-  };
-  if(pos.y <= 15/2)
-  {
+  if(pos.y <= 15.0/2)
     vel.y =  -(vel.y);
-  };
+  if(pos.x >= windowWidth - 15.0/2)
+      vel.x =  -(vel.x);
+  if(pos.x <= 15.0/2)
+      vel.x =  -(vel.x);
+  
+  //if(pos.x <= p1Position.x);
 
-  if(pos.x >= windowWidth - 15/2)
+  return vel;
+}
+
+Vector2 p1CollisionCheck(Vector2 p1Position, Vector2 pos, Vector2 vel){
+  if(pos.x <=  12 + (15.0/2))
   {
-    vel.x =  -(vel.x);
-  };
-  if(pos.x <= 15/2)
+    if(pos.y >= p1Position.y && pos.y <= p1Position.y + 60){
+      vel.x = -(vel.x);
+      vel.y = -(vel.y);
+    }
+  }
+  return vel;
+}
+
+Vector2 p2CollisionCheck(Vector2 p2Position, Vector2 pos, Vector2 vel){
+  if(pos.x >= windowWidth - 12 - (15.0/2))
   {
-    vel.x =  -(vel.x);
-  };
+    if(pos.y >= p2Position.y && pos.y <= p2Position.y + 60){
+      vel.x = -(vel.x);
+      vel.y = -(vel.y);
+    }
+  }
   return vel;
 }
 
@@ -70,14 +88,15 @@ int main() {
     dt = GetFrameTime();
 
     ballVelocity = CollisionCheck(ballPosition, ballVelocity);
+    ballVelocity = p1CollisionCheck(p1Position, ballPosition, ballVelocity);
+    ballVelocity = p2CollisionCheck(p2Position, ballPosition, ballVelocity);
 
-    ballPosition.x +=  ballVelocity.x;
-    ballPosition.y +=  ballVelocity.y;
+    ballPosition = Vector2Add(ballPosition, ballVelocity);
 
     BeginDrawing();
       ClearBackground(BACKGROUND_GREEN);
       DrawText("Let's Play Ping Pong", windowWidth/2 - 100,  windowHeight/2 + 50, 20, OFFWHITE);
-
+      
       DrawCircleV(ballPosition, 15, OFFWHITE);
 
       p1Position.y = p1Input(p1Position.y);
@@ -88,6 +107,7 @@ int main() {
     EndDrawing();
   }
 
+  
   CloseWindow();
 
   return 0;
