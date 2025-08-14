@@ -46,12 +46,12 @@ Vector2 sideCollision(Vector2 pos)
   if(pos.x >= windowWidth - 15.0/2)
     {
       score[0]++;
-      pos = {windowWidth/2, windowHeight/2};
+      pos = {windowWidth/2.0, windowHeight/2.0};
     }
   if(pos.x <= 15.0/2)
     {
       score[1]++;
-      pos = {windowWidth/2, windowHeight/2};
+      pos = {windowWidth/2.0, windowHeight/2.0};
     }
     return pos;
 }
